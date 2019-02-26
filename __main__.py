@@ -669,7 +669,7 @@ class Settings(Toplevel):
         showinfo("Help",message="""
                         TIC-TAC-TOE
                     
-                Version 1.20
+                Version 0.01
                 Make (7 Dec'18)
                     
                 Developer: Saad Mairaj
