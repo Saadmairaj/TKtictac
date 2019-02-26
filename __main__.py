@@ -4,7 +4,7 @@ from tkinter import ttk
 from tkinter.font import Font
 from tkinter.messagebox import *
 from pygame.mixer import init, music
-from TkExtra import GuiLoop
+from Tk_Loop import GuiLoop
 from Titlebar import TitleBar
 
 
