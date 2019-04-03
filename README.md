@@ -10,3 +10,15 @@ There are 4 game modes that can be selected from the settings menu.
   1. Python 3
   2. Pygame (Used pygame to get sound in the game)
   
+## Version
+  0.0.1
+  * Fixed issues with sound
+  * Fixed issues with Light mode
+  * Fixed issues with titlebar 
+  * Added icon
+  * Some other Bug fixes 
+  
+  0.0.0
+  * Stable release
+    
+    
