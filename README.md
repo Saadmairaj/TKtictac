@@ -1,16 +1,23 @@
 # TKtictac
-Tic-Tac-Toe game worked with Tkinter module for graphical interface.
 
-## Mind of a bot
+Tic-tac-toe (American English), noughts and crosses (Commonwealth English), or Xs and Os is a paper-and-pencil game for two players, X and O, who take turns marking the spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner.
 
-We play against the computer which is a hard coded bot that is almost unbeatable.
-There are 4 game modes that can be selected from the settings menu.
+## Game play
+
+In order to win the game, a player must place three of their marks in a horizontal, vertical, or diagonal row. The game is only one player against the computer. There are 4 difficulty mode which can be selected from the setting menu plus some other options that can be selected as well to improve experience of the user.
 
 ## Dependencies
+
   1. Python 3
-  2. Pygame (Used pygame to get sound in the game)
+  2. Pygame (Used for sound effects)
+  3. tkmacosx
   
-## Version
+## Changelog
+
+  0.0.2
+  * Improved user interface
+  * Fix issues with overrideredirect on different platforms
+
   0.0.1
   * Fixed issues with sound
   * Fixed issues with Light mode
@@ -20,5 +27,7 @@ There are 4 game modes that can be selected from the settings menu.
   
   0.0.0
   * Stable release
-    
-    
+
+## License
+
+[MIT](https://github.com/Saadmairaj/TKtictac/blob/master/LICENSE)
