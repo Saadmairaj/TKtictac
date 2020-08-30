@@ -1,3 +1,6 @@
+__version__ = '0.0.2'
+
+import platform
 import random as rnd
 from tkinter import *
 from tkinter import ttk
@@ -6,15 +9,32 @@ from tkinter.messagebox import *
 from pygame.mixer import init, music
 from Tk_Loop import GuiLoop
 from Titlebar import TitleBar
+from TkExtra import Canvas, grid
+
+import tkinter.font as font
+import tkmacosx as tkm
+
+
+# Common button options
+button_options = dict(
+    borderless=1,
+    takefocus=0,
+    activebackground=('white', 'black'),
+    overbackground='#3d4246',
+    font=('Avenir'),
+)
 
 
 class FrameBody(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self)
+        self.option_add("*Font", ('Avenir'))
+
         self.py = init()
         self.tb = TitleBar(self, "TicTacToe", False)  # if enabled use self.geometry("500x325+300+200")
+        self.tb.icon('./assets/icon.icns')
         self.tb.dark_mode()
-        self.Load = music.load('dummy.wav')
+        self.Load = music.load('dummy.mp3')
         
         self.Move = True
         self.off = True
@@ -46,7 +66,7 @@ class FrameBody(Tk):
         self._Grid(root=self.options, row=15, col=3)
         
         self.Score=Label(self.options, text='Score', fg=self.BgWhite, bg=self.BgBlack)
-        self.Score.config(font=Font(size=20,underline=True))
+        self.Score.config(font=Font(size=35, underline=True, family='Savoye LET', slant='italic'))
         self.Score.grid(row=0, columnspan=4, padx=10)
 
         self.Player=Label(self.options, text="Player",fg=self.BgWhite, bg=self.BgBlack)
@@ -92,6 +112,7 @@ class FrameBody(Tk):
         r = lambda: rnd.randint(0,255)
         color = ('#%02X%02X%02X' % (r(),r(),r()))
         self.Score.configure(fg=color)
+        self.Setting.headinglb['fg'] = color
         for i in (1,2,3,4): self.Draw.itemconfig(i,fill=color)
         self.config(highlightcolor=color)
 
@@ -140,7 +161,7 @@ class FrameBody(Tk):
                 self.PlScr+=1
                 self.PlayerScore.configure(text=str(self.PlScr))
                 for x,y in self.Draw._LineDic.items():
-                    if i == y: self.Draw.itemconfig(x,state='normal')
+                    if i == y: self.Draw.itemconfig(x, state='normal')
                 self.Move=False
                 self.Restarting = False
                 self.Win_ChkLoop.Pause()
@@ -289,8 +310,7 @@ class Bot(object):
                     self._AlreadyMoved = True
                     return True
 
-            if self.diff=="unbeatable" or self.diff=="medium" \
-            or self.diff=="hard" or self.diff=="easy":
+            if self.diff=="unbeatable" or self.diff=="medium" or self.diff=="hard" or self.diff=="easy":
                 if self.Aggressive_Move(): 
                     self._AlreadyMoved = True
                     return True
@@ -305,8 +325,7 @@ class Bot(object):
                     self._AlreadyMoved = True
                     return True
 
-            if self.diff=="unbeatable" or self.diff=="medium" \
-            or self.diff=="hard" or self.diff=="easy":
+            if self.diff=="unbeatable" or self.diff=="medium" or self.diff=="hard" or self.diff=="easy":
                 if self.Just_Move(): 
                     self._AlreadyMoved = True
                     return True
@@ -456,125 +475,82 @@ class Settings(Toplevel):
         self.master = master
         self.BgBlack = master.BgBlack
         self.BgWhite = master.BgWhite
+        grid(self, 6, 3)
 
         self.config(bg=self.BgBlack,highlightbackground= self.BgWhite,
                 highlightcolor= self.BgWhite,highlightthickness=1)
         self.wm_overrideredirect(1)
-        self.wm_overrideredirect(0)
-        self.attributes('-alpha', 0.85)
+
+        if platform.system() == 'Darwin':
+            self.wm_overrideredirect(0)
+        self.attributes('-alpha', 0.95)
         self.withdraw()
 
-        self.master._Grid(self, 20, 40)
-
         # Settings
-        self.SettingLB = Label(self.master.options, text="Settings", relief="groove")
-        self.SettingLB.config(fg= self.BgWhite, bg="black",borderwidth=2)
+        self.SettingLB = tkm.Button(self.master.options, 
+                                    text='Settings', fg=self.BgWhite, 
+                                    bg='black', command=self.Settings,
+                                    **button_options)
         self.SettingLB.grid(row=14, columnspan=4, ipadx=10, ipady=2, pady=2)
 
-        self.SettingLB.bind("<Enter>", lambda evt:self.SettingLB.config(bg="#3d4246"))
-        self.SettingLB.bind("<Leave>", lambda evt:self.SettingLB.config(bg="black"))
-        self.SettingLB.bind("<Button-1>", lambda evt:self.SettingLB.config(relief="sunken"), add="+")
-        self.SettingLB.bind("<ButtonRelease-1>", lambda evt:self.SettingLB.config(relief="groove"), add="+")
-
-        self.SettingLB.bind("<Button-1>", self.Settings, add="+")
-        self.unbind("<Button-1>")
-
-        self._Note = Label(self, text=("Note: The difficulty will change next round."))
+        self.headinglb = Label(self, text='Settings Menu')
+        self._Note = Label(self, text="Note: The difficulty will change next round.")
         self._Note.config(bg="black", fg="white", font=Font(size=9))
-        self._Note.grid(rowspan=1, row=9, columnspan=17, column=16)
+        self.headinglb.config(bg="black", fg="white", font=Font(size=35, underline=True, family='Savoye LET', slant='italic'))
+        self.headinglb.grid(row=0, columnspan=3, sticky='nsew', pady=(5,10))
+        self._Note.grid(row=5, columnspan=3)
 
         self.ImpLabels()
 
 
     def ImpLabels(self):
-        self.LightM = Label(self,text="☀",bg="black",fg="white",relief="groove",borderwidth=2)
-        self.LightM.bind("<Enter>", lambda evt:self.LightM.config(bg="#3d4246"))
-        self.LightM.bind("<Leave>", lambda evt:self.LightM.config(bg="black"))
-        self.LightM.bind("<Button-1>", lambda evt:self.LightM.config(relief="sunken"), add="+")
-        self.LightM.bind("<ButtonRelease-1>", lambda evt:self.LightM.config(relief="groove"), add="+")
-        self.LightM.bind("<Button-1>", self.Light_Mode, add="+")
-        self.LightM.grid(row=1, column=1, ipadx=10, ipady=2, pady=2)
+        self.LightM = tkm.Button(self, text='☀', bg='black', fg='white', width=40, pady=2, command=self.Light_Mode, **button_options)
+        self.LightM.grid(row=1, column=0,)
 
-        self.DarkM = Label(self,text="☾",bg="black",fg="white",relief="groove",borderwidth=2)
-        self.DarkM.bind("<Enter>", lambda evt:self.DarkM.config(bg="#3d4246"))
-        self.DarkM.bind("<Leave>", lambda evt:self.DarkM.config(bg="black"))
-        self.DarkM.bind("<Button-1>", lambda evt:self.DarkM.config(relief="sunken"), add="+")
-        self.DarkM.bind("<ButtonRelease-1>", lambda evt:self.DarkM.config(relief="groove"), add="+")
-        self.DarkM.bind("<Button-1>", self.Dark_Mode, add="+")
-        self.DarkM.grid(row=2, column=1, ipadx=10, ipady=2, pady=2)
+        self.DarkM = tkm.Button(self,text="☾",bg="black", fg="white", width=40, pady=2, command=self.Dark_Mode, **button_options)
+        self.DarkM.grid(row=2, column=0)
 
-        self.Easy = Label(self,text="Easy",bg="black",fg="white",relief="groove")
-        self.Easy.bind("<Enter>", lambda evt:self.Easy.config(bg="#3d4246"))
-        self.Easy.bind("<Leave>", lambda evt:self.Easy.config(bg="black"))
-        self.Easy.bind("<Button-1>", lambda evt:self.Easy.config(relief="sunken"), add="+")
-        self.Easy.bind("<ButtonRelease-1>", lambda evt:self.Easy.config(relief="groove"), add="+")
-        self.Easy.bind("<Button-1>", lambda evt: self.Difficulty("easy"), add="+")
-        self.Easy.grid(row=1, column=24, ipadx=30, ipady=2, pady=2)
+        self.Easy = tkm.Button(self,text="Easy", bg="black", fg="white", **button_options)
+        self.Easy['command'] = lambda: self.Difficulty('easy')
+        self.Easy.grid(row=1, column=1, sticky='nsew', padx=10, pady=2)
 
-        self.Medium = Label(self,text="Medium",bg="black",fg="white",relief="groove")
-        self.Medium.bind("<Enter>", lambda evt:self.Medium.config(bg="#3d4246"))
-        self.Medium.bind("<Leave>", lambda evt:self.Medium.config(bg="black"))
-        self.Medium.bind("<Button-1>", lambda evt:self.Medium.config(relief="sunken"), add="+")
-        self.Medium.bind("<ButtonRelease-1>", lambda evt:self.Medium.config(relief="groove"), add="+")
-        self.Medium.bind("<Button-1>", lambda evt: self.Difficulty("medium"), add="+")
-        self.Medium.grid(row=2, column=24, ipadx=20, ipady=2, pady=2)
+        self.Medium = tkm.Button(self,text="Medium", bg="black", fg="white", **button_options)
+        self.Medium['command'] = lambda: self.Difficulty('medium')
+        self.Medium.grid(row=2, column=1,sticky='nsew', padx=10, pady=2)
 
-        self.Hard = Label(self,text="Hard",bg="black",fg="white",relief="groove")
-        self.Hard.bind("<Enter>", lambda evt:self.Hard.config(bg="#3d4246"))
-        self.Hard.bind("<Leave>", lambda evt:self.Hard.config(bg="black"))
-        self.Hard.bind("<Button-1>", lambda evt:self.Hard.config(relief="sunken"), add="+")
-        self.Hard.bind("<ButtonRelease-1>", lambda evt:self.Hard.config(relief="groove"), add="+")
-        self.Hard.bind("<Button-1>", lambda evt: self.Difficulty("hard"), add="+")
-        self.Hard.grid(row=3, column=24, ipadx=30, ipady=2, pady=2)
+        self.Hard = tkm.Button(self, text="Hard", bg="black", fg="white", **button_options)
+        self.Hard['command'] = lambda: self.Difficulty('hard')
+        self.Hard.grid(row=3, column=1, sticky='nsew', padx=10, pady=2)
 
-        self.Unbeatable = Label(self,text="Unbeatable",bg="black",fg="white",relief="groove")
-        self.Unbeatable.bind("<Enter>", lambda evt:self.Unbeatable.config(bg="#3d4246"))
-        self.Unbeatable.bind("<Leave>", lambda evt:self.Unbeatable.config(bg="black"))
-        self.Unbeatable.bind("<Button-1>", lambda evt:self.Unbeatable.config(relief="sunken"), add="+")
-        self.Unbeatable.bind("<ButtonRelease-1>", lambda evt:self.Unbeatable.config(relief="groove"), add="+")
-        self.Unbeatable.bind("<Button-1>",lambda evt: self.Difficulty("unbeatable"), add="+")
-        self.Unbeatable.grid(row=4, column=24, ipadx=8.5, ipady=2, pady=2)
+        self.Unbeatable = tkm.Button(self,text="Unbeatable",bg="black",fg="white", **button_options)
+        self.Unbeatable['command'] = lambda: self.Difficulty('unbeatable')
+        self.Unbeatable.grid(row=4, column=1, sticky='nsew', padx=10, pady=2)
 
-        self.Close = Label(self,text="Close",bg="black",fg="white",relief="groove",borderwidth=2)
-        self.Close.bind("<Enter>", lambda evt:self.Close.config(bg="#3d4246"))
-        self.Close.bind("<Leave>", lambda evt:self.Close.config(bg="black"))
-        self.Close.bind("<Button-1>", lambda evt:self.Close.config(relief="sunken"), add="+")
-        self.Close.bind("<ButtonRelease-1>", lambda evt:self.Close.config(relief="groove"), add="+")
-        self.Close.bind("<Button-1>",self.Settings, add="+")
-        self.Close.grid(row=17, column=36, ipadx=10, ipady=2, pady=2)
+        self.Close = tkm.Button(self,text="Close", bg="black", fg="white", pady=5, **button_options)
+        self.Close['command'] = self.Settings
+        self.Close.grid(row=6, pady=(10, 5), padx=50, columnspan=3, sticky='nsew')
 
-        self.Sound = Label(self,text="  ♬     ✔",bg="black",fg="white",relief="groove",borderwidth=2)
-        self.Sound.bind("<Enter>", lambda evt:self.Sound.config(bg="#3d4246"))
-        self.Sound.bind("<Leave>", lambda evt:self.Sound.config(bg="black"))
-        self.Sound.bind("<Button-1>", lambda evt:self.Sound.config(relief="sunken"), add="+")
-        self.Sound.bind("<ButtonRelease-1>", lambda evt:self.Sound.config(relief="groove"), add="+")
-        self.Sound.bind("<Button-1>", self.Sound_Mode, add="+")
-        self.Sound.grid(row=10,column=1, ipadx=10, ipady=2, pady=2)
+        self.Sound = tkm.Button(self,text="♬ ✔", bg="black", fg="white", **button_options)
+        self.Sound['command'] = self.Sound_Mode
+        self.Sound.grid(row=3, column=0, ipadx=10, ipady=2, pady=2)
 
-        self.CrlEff = Label(self,text="Color ✔",bg="black",fg="white",relief="groove",borderwidth=2)
-        self.CrlEff.bind("<Enter>", lambda evt:self.CrlEff.config(bg="#3d4246"))
-        self.CrlEff.bind("<Leave>", lambda evt:self.CrlEff.config(bg="black"))
-        self.CrlEff.bind("<Button-1>", lambda evt:self.CrlEff.config(relief="sunken"), add="+")
-        self.CrlEff.bind("<ButtonRelease-1>", lambda evt:self.CrlEff.config(relief="groove"), add="+")
-        self.CrlEff.bind("<Button-1>", self.ColorEffects, add="+")
-        self.CrlEff.grid(row=9,column=1, ipadx=10, ipady=2, pady=2)
+        self.CrlEff = tkm.Button(self,text="Color ✔", bg="black", fg="white", **button_options)
+        self.CrlEff['command'] = self.ColorEffects
+        self.CrlEff.grid(row=4, column=0, ipadx=10, ipady=2, pady=2)
 
-        self.Help = Label(self,text="?",bg="black",fg="white",relief="groove",borderwidth=2)
-        self.Help.bind("<Enter>", lambda evt:self.Help.config(bg="#3d4246"))
-        self.Help.bind("<Leave>", lambda evt:self.Help.config(bg="black"))
-        self.Help.bind("<Button-1>", lambda evt:self.Help.config(relief="sunken"), add="+")
-        self.Help.bind("<ButtonRelease-1>", lambda evt:self.Help.config(relief="groove"), add="+")
-        self.Help.bind("<Button-1>", self._Help, add="+")
-        self.Help.grid(row=1,column=39, ipadx=10, ipady=2, pady=2)
+        self.Help = tkm.Button(self,text="ⓘ",bg="black", fg="white", width=40, **button_options)
+        self.Help['command'] = self._Help
+        self.Help.grid(row=1, column=2, ipadx=10, ipady=2, pady=2)
 
     def Settings(self, evt=None):
         if not self._Settings:
-            geo = "400"+"x"+"200"+"+"+str(self.master.winfo_rootx()+50)+'+'+str(self.master.winfo_rooty()+70)
+            geo = "400"+"x"+"300"+"+"+str(self.master.winfo_rootx()+50)+'+'+str(self.master.winfo_rooty()+12)
             self.lift()
             self.geometry(geo)
             self.deiconify()
             self.update_idletasks()
             self.grab_set()
+            self.Difficulty(self.master.difficulty)
             self._Settings = True
         else:
             self.withdraw()
@@ -630,15 +606,20 @@ class Settings(Toplevel):
     
     def Sound_Mode(self, evt=None): 
         if self._Sound:
-            self.Sound.config(text="  ♬     ✕")
+            self.Sound.config(text="♬ ✕")
             self.master.off = False
             self._Sound=False
         else:
-            self.Sound.config(text="  ♬     ✔")
+            self.Sound.config(text="♬ ✔")
             self.master.off = True
             self._Sound=True
     
-    def Difficulty(self, dif): 
+    def Difficulty(self, dif):
+        for i in (self.Easy, self.Medium, self.Hard, self.Unbeatable):
+            if i['text'].lower() == dif:
+                i['state'] = 'active'
+            else:
+                i['state'] = 'normal'
         self.master.difficulty = dif
 
     def ColorEffects(self, evt=None):
@@ -648,11 +629,13 @@ class Settings(Toplevel):
             if self.cget('bg')=="black":
                 for i in (1,2,3,4): self.master.Draw.itemconfig(i,fill="white")
                 self.master.Score.config(fg="white", bg="black")
+                self.headinglb.config(fg="white", bg="black")
                 self.master.config(highlightcolor="white")
             else:
                 for i in (1,2,3,4): self.master.Draw.itemconfig(i,fill="black")
                 self.master.Score.config(fg="black", bg="white")
                 self.master.config(highlightcolor="black")
+                self.headinglb.config(fg="black", bg="white")
             self._ColorEff = False
         else:
             if self.cget('bg')=="black":
