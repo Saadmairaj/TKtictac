@@ -1,2 +1,3 @@
-pygame
-git+https://github.com/Saadmairaj/tkmacosx@a852c1fbdbf67c4eac84403acd5f0b54d825a4d3#egg=tkmacosx
+Pillow == 7.1.2
+pygame == 1.9.4
+tkmacosx >= 0.1.4
