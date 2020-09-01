@@ -50,9 +50,9 @@ class Canvas(tk.Canvas):
         for i in range(len(points)):
             if i <= 3:
                 kw['start'] = 90*(i+1)
-                ids.append(self._create('arc', points[i], kw))
+                ids.append(self._create('arc', points[i], kw.copy()))
             else:
-                ids.append(self._create('polygon', points[i], cnf))
+                ids.append(self._create('polygon', points[i], cnf.copy()))
         return tuple(ids)
 
     # Circle for the canvas
