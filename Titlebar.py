@@ -1,9 +1,6 @@
 import platform
-
 import tkinter as tk
 import tkmacosx as tkm
-
-# from tkinter import *
 from tkinter import ttk
 from tkinter.font import Font
 from TkExtra import Canvas, grid
@@ -36,12 +33,7 @@ class TitleBar(Canvas):
         self.sep1.grid(row=1, columnspan=51, column=0, stick='nsew')
 
         self._dragw_window()
-
         self._window_protocols(fullscreen)
-        # if not fullscreen:
-        #     self._window_protocols()
-        # else:
-        #     self._window_protocols(True)
 
         if Resize:
             self.grip = ttk.Sizegrip(self.parent)
@@ -144,7 +136,8 @@ class TitleBar(Canvas):
                            highlightthickness=0, bg=self._white)
         self._box.grid(row=0, column=50)
 
-        self._box.create_roundsqaure(5, 3, w, 17, 8, tags="box", style='arc')
+        self._box.create_roundsqaure(
+            5, 3, w, 17, 8, tags="box", style='arc', outline=self._black)
         self._box.create_circle(
             19.5, 11.5, 7, fill='#80b4f4', width=0, state="hidden", tags="minihigh")
         self._box.create_circle(
@@ -193,7 +186,8 @@ class TitleBar(Canvas):
         im = Image.open(file)
         im_temp = im.resize((20, 20), Image.ANTIALIAS)
         im_temp = ImageTk.PhotoImage(im_temp)
-        self.iconlb = tk.Canvas(self, width=20, height=20, bg=self._white, highlightthickness=0)
+        self.iconlb = tk.Canvas(self, width=20, height=20,
+                                bg=self._white, highlightthickness=0)
         self.iconlb.create_image(0, 0, image=im_temp, anchor='nw')
         self.iconlb.image = im_temp
         self.iconlb.grid(row=0, column=0)
@@ -205,12 +199,10 @@ class TitleBar(Canvas):
     def dark_mode(self):
         self._white.set('black')
         self._black.set('white')
-        self._box.itemconfig("box", outline='white')
 
     def light_mode(self):
         self._white.set('white')
         self._black.set('black')
-        self._box.itemconfig("box", outline='black')
 
 
 # testing purposes
