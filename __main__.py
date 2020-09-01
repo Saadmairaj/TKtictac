@@ -1,3 +1,5 @@
+## DISCLAIMER: This was my first ever game after learning the basic of python so the current .py file is not optimized 
+
 __version__ = '0.0.2'
 
 import platform
@@ -652,7 +654,7 @@ class Settings(Toplevel):
         showinfo("Help",message="""
                         TIC-TAC-TOE
                     
-                Version 0.01
+                Version 0.0.2
                 Make (7 Dec'18)
                     
                 Developer: Saad Mairaj
