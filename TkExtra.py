@@ -17,12 +17,10 @@ def _agsmerge(args):
 # Define Grid layout
 def grid(root, row, column):
     "Defines rows and columns if grid method is used"
-    if column:
-        for y in range(column):
-            tk.Grid.columnconfigure(root, y, weight=1)
-    if row:
-        for x in range(row):
-            tk.Grid.rowconfigure(root, x, weight=1)
+    for y in range(column):
+        tk.Grid.columnconfigure(root, y, weight=1)
+    for x in range(row):
+        tk.Grid.rowconfigure(root, x, weight=1)
 
 
 class Canvas(tk.Canvas):
@@ -31,7 +29,7 @@ class Canvas(tk.Canvas):
         'Internal function.'
         x, y, w, h, c = _agsmerge((ags, args))
         ids = []
-        cnf = dict(kw)
+        cnf = dict(**kw)
         for i in ('extent', 'start', 'style'):
             cnf.pop(i, None)
         for i in ('joinstyle', 'smooth', 'slinesteps'):
