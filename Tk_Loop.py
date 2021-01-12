@@ -22,10 +22,10 @@ class GuiLoop:
         self._loop()
 
     def config(self, **options):
-        self.func = options.get('func')
-        self.count = options.get('count', True)
-        self._reset = options.get('count', True)
-        self.speed = options.get('speed')
+        self.func = options.get('func', self.func)
+        self.count = options.get('count', self.count)
+        self._reset = options.get('count', self._reset)
+        self.speed = options.get('speed', self.speed)
 
     def _loop(self):
         if self.__run__() and self.func != None and not self.Brk:
