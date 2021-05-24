@@ -20,7 +20,34 @@ In order to win the game, a player must place three of their marks in a horizont
   2. Pygame (Used for sound effects)
   3. tkmacosx
   4. Pillow (PIL)
-  
+
+## Installation
+
+1. Clone this git repo
+    
+    ```bash
+    $ git clone https://github.com/Saadmairaj/TKtictac.git
+    ```
+
+2. Change directory to the Tktictac and create a virtual environment
+    
+    ```bash
+    $ cd Tktictac
+    $ python -m venv env
+    ```
+
+3. Activate the virtual environment and install the dependencies
+
+    ```bash
+    $ source env/bin/activate
+    $ pip install -r requirements.txt
+    ```
+4. Now, we are ready to go! Run the Tktictac with the following command
+
+    ```bash
+    $ python __main__.py
+    ```
+    
 ## Changelog
 
   0.0.2
