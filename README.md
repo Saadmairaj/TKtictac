@@ -17,7 +17,7 @@ In order to win the game, a player must place three of their marks in a horizont
 ## Dependencies
 
   1. Python 3
-  2. Pygame (Used for sound effects)
+  2. Pygame _(Used for sound effects)_
   3. tkmacosx
   4. Pillow (PIL)
 
